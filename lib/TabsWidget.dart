@@ -9,35 +9,85 @@ class TabsWidget extends StatefulWidget {
   _TabsWidgetState createState() => _TabsWidgetState();
 }
 
-class _TabsWidgetState extends State<TabsWidget> {
+class _TabsWidgetState extends State<TabsWidget> with TickerProviderStateMixin {
+  TabPage _currPage;
+
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _tabController = TabController(length: widget.pages.length, vsync: this);
+
+    _tabController.addListener(() {
+      setState(() {
+        _currPage = widget.pages[_tabController.index];
+      });
+    });
+
+    setState(() {
+      _currPage = widget.pages[0];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: widget.pages.length,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("Home"),
-          bottom: TabBar(
-            tabs: widget.pages
-                .map((page) => Tab(
-                      icon: Icon(page._icon),
-                    ))
-                .toList(),
-          ),
-        ),
-        body: TabBarView(
-          children: widget.pages.map((page) => page._widget).toList(),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: widget.pages
+              .map((page) => Tab(
+                    icon: Icon(page._icon),
+                  ))
+              .toList(),
         ),
       ),
+      body: TabBarView(
+        controller: _tabController,
+        children: widget.pages.map((page) => page._widget).toList(),
+      ),
+      floatingActionButton: this._currPage.hasFab
+          ? FloatingActionButton(
+              onPressed: this._currPage.getFabOnPressed,
+              child: Icon(this._currPage.fabIcon),
+            )
+          : null,
     );
   }
 }
 
 class TabPage {
   final IconData _icon;
-  final Widget _widget;
+  final TabPageWidget _widget;
 
-  TabPage(IconData icon, Widget widget)
-      : this._icon = icon,
-        this._widget = widget;
+  TabPage(this._icon, this._widget);
+
+  get hasFab => _widget.onFabPressed != null;
+  get fabIcon => _widget.fabIcon;
+
+  get getFabOnPressed => hasFab
+      ? () {
+          _widget.onFabPressed.notifyListeners();
+        }
+      : null;
+}
+
+abstract class TabPageWidget extends StatefulWidget {
+  final IconData fabIcon;
+  final OnFabPressedEvent onFabPressed;
+
+  TabPageWidget({Key key, this.fabIcon, this.onFabPressed}) : super(key: key);
+}
+
+class OnFabPressedEvent extends ChangeNotifier {
+  @override
+  void notifyListeners() {
+    super.notifyListeners();
+  }
+
+  @override
+  bool get hasListeners => super.hasListeners;
 }

@@ -12,7 +12,8 @@ class User {
         this.computer = computer;
 
   User.fromJson(Map data)
-      : this.dob = DOB.fromJson(data['dob']),
+      : this.name = Name.fromJson(data['name']),
+        this.dob = DOB.fromJson(data['dob']),
         this.picture = Picture.fromJson(data['picture']),
         this.phone = data['phone'];
 }
@@ -32,6 +33,10 @@ class Name {
     this.first = data['first'];
     this.last = data['last'];
   }
+
+  String get initials => first.substring(0, 1) + last.substring(0, 1);
+
+  String get full => "$first $last";
 }
 
 class DOB {

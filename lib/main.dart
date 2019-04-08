@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pbasw_flutter_exam/UserProfileWidget.dart';
+import 'package:pbasw_flutter_exam/RandomUsersWidget.dart';
 import 'package:pbasw_flutter_exam/UsersWidget.dart';
 import 'TabsWidget.dart';
 
@@ -8,8 +9,9 @@ void main() => runApp(MaterialApp(
       theme: ThemeData.light(),
       home: TabsWidget(
         pages: [
-          TabPage(Icons.supervised_user_circle, UsersWidget()),
-          TabPage(Icons.face, UserProfileWidget())
+          TabPage(Icons.supervised_user_circle, RandomUsersWidget()),
+          TabPage(Icons.face, UsersWidget())
         ],
       ),
+      routes: {'/user': (context) => new UserProfileWidget()},
     ));

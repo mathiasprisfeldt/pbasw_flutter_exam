@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "949806502056",
+    "firebase_url": "https://pbasw-flutter-exam.firebaseio.com",
+    "project_id": "pbasw-flutter-exam",
+    "storage_bucket": "pbasw-flutter-exam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949806502056:android:d4669ec6cb858960",
+        "android_client_info": {
+          "package_name": "com.example.pbasw_flutter_exam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZkUV13x1I-ijSZGgjOygrEjI3vG5NHjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949806502056-nu0s21226klmv5rtaqgthsrdsjtsfq1k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
