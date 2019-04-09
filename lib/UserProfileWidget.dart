@@ -41,7 +41,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                       child: Padding(
                         padding: const EdgeInsets.only(right: 4.0),
                         child: TextFormField(
-                          decoration: InputDecoration(hintText: "First"),
+                          decoration: InputDecoration(labelText: "First"),
                           validator: (value) {
                             if (value.isEmpty) {
                               return "User must have a name";
@@ -54,7 +54,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                       child: Padding(
                         padding: const EdgeInsets.only(left: 4.0),
                         child: TextFormField(
-                          decoration: InputDecoration(hintText: "Last"),
+                          decoration: InputDecoration(labelText: "Last"),
                           validator: (value) {
                             if (value.isEmpty) {
                               return "User must have a name";
@@ -65,18 +65,13 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                     )
                   ],
                 ),
-                Row(
-                  children: <Widget>[
-                    Expanded(
-                      child: TextFormField(
-                          decoration: InputDecoration(hintText: birthDateText)),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.date_range),
-                      onPressed: () => _selectDate(context),
-                    )
-                  ],
-                ),
+                TextFormField(
+                    decoration: InputDecoration(
+                        labelText: birthDateText,
+                        suffixIcon: IconButton(
+                          icon: Icon(Icons.date_range),
+                          onPressed: () => _selectDate(context),
+                        ))),
                 RaisedButton(
                   child: Text(submitText),
                   onPressed: () {
