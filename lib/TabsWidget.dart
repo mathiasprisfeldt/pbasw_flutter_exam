@@ -90,4 +90,9 @@ class OnFabPressedEvent extends ChangeNotifier {
 
   @override
   bool get hasListeners => super.hasListeners;
+
+  @override
+  void addListener(listener) {
+    super.addListener(listener);
+  }
 }

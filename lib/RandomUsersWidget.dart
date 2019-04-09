@@ -20,9 +20,17 @@ class _RandomUsersWidgetState extends State<RandomUsersWidget> {
   @override
   void initState() {
     super.initState();
-    widget.onFabPressed.addListener(() {
-      setState(() {});
-    });
+    widget.onFabPressed.addListener(onFabPressed);
+  }
+
+  void onFabPressed() {
+    setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    widget.onFabPressed.removeListener(onFabPressed);
   }
 
   @override
