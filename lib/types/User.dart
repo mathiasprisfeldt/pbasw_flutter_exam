@@ -1,7 +1,7 @@
 class User {
-  Name name;
-  DOB dob;
-  Picture picture;
+  Name name = Name();
+  DOB dob = DOB();
+  Picture picture = Picture();
   String phone;
   String computer;
 
@@ -10,6 +10,12 @@ class User {
         this.picture = picture,
         this.phone = phone,
         this.computer = computer;
+
+  User.empty() {
+    this.name = Name();
+    this.dob = DOB();
+    this.picture = Picture();
+  }
 
   User.fromJson(Map data)
       : this.name = Name.fromJson(data['name']),
