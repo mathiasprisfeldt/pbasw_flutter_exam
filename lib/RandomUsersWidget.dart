@@ -22,10 +22,15 @@ class _RandomUsersWidgetState extends State<RandomUsersWidget> {
   void initState() {
     super.initState();
     widget.onFabPressed.addListener(onFabPressed);
+
+    if (widget.randomUserService.recentUsers == null) onFabPressed();
   }
 
   void onFabPressed() {
-    setState(() {});
+    widget.randomUserService.updateRecentUsers(50).whenComplete(() {
+      if (!mounted) return;
+      setState(() {});
+    });
   }
 
   @override
@@ -37,7 +42,7 @@ class _RandomUsersWidgetState extends State<RandomUsersWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: widget.randomUserService.getUsers(50).catchError((err) => {
+      future: widget.randomUserService.recentUsers?.catchError((err) => {
             Scaffold.of(context).showSnackBar(SnackBar(
               content: Text(err),
             ))

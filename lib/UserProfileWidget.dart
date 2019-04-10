@@ -15,10 +15,9 @@ class UserProfileWidget extends StatefulWidget {
 class _UserProfileWidgetState extends State<UserProfileWidget> {
   final _formKey = GlobalKey<FormState>();
 
-  User user = User.empty();
+  User user;
   bool get userExisting => user.name?.first != null;
 
-  DateTime _birthDate;
   TextEditingController _birthDateField = TextEditingController();
 
   // Focus nodes
@@ -31,7 +30,12 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   @override
   Widget build(BuildContext context) {
     var existingUser = ModalRoute.of(context).settings.arguments;
-    if (existingUser != null) user = existingUser;
+    if (user == null) {
+      if (existingUser != null)
+        user = existingUser;
+      else
+        user = User.empty();
+    }
 
     var title = userExisting ? "Editing ${user.name.first}" : "New User";
 
@@ -56,8 +60,9 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   SingleChildScrollView buildForm(BuildContext context) {
     var submitText = userExisting ? "Edit" : "Create";
 
-    if (user?.dob?.date != null)
+    if (user?.dob?.date != null) {
       _birthDateField.text = DateHelper.format(user.dob.date);
+    }
 
     return SingleChildScrollView(
       child: Form(
@@ -136,9 +141,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                   try {
                     var newDate = DateHelper.parse(value);
 
-                    _birthDate = newDate;
                     _birthDateField.text = DateHelper.format(newDate);
-
                     user.dob.date = newDate;
                   } catch (e) {
                     return "Must be a valid date";
@@ -158,11 +161,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                 decoration: InputDecoration(
                     labelText: "Computer", hintText: "Ex. MacBook Pro 2019"),
                 validator: (value) {
-                  if (value.isEmpty) {
-                    return "Computer must not be empty";
-                  } else {
-                    user.computer = value;
-                  }
+                  user.computer = value;
                 },
                 onFieldSubmitted: (res) => onSubmitPressed(context),
               ),
@@ -203,14 +202,14 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
     var newDate = await showDatePicker(
       context: context,
       firstDate: DateTime(0),
-      initialDate: _birthDate ?? DateTime.now(),
+      initialDate: user.dob?.date ?? DateTime.now(),
       lastDate: DateTime.now(),
     );
 
     if (newDate == null) return;
 
     setState(() {
-      _birthDate = newDate;
+      user.dob?.date = newDate;
       _birthDateField.text = DateHelper.format(newDate);
     });
   }
