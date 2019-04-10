@@ -12,7 +12,7 @@ Widget buildUserCard(BuildContext context, User user,
           onDismissed: (dir) {
             userService.removeUser(userId);
           },
-          direction: DismissDirection.horizontal,
+          direction: DismissDirection.endToStart,
           key: Key(userId),
           child: createCard(userId, context, user),
         );
