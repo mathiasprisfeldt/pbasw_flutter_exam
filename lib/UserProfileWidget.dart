@@ -131,7 +131,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                 keyboardType: TextInputType.datetime,
                 controller: _birthDateField,
                 decoration: InputDecoration(
-                    hintText: "Ex. 05/02/1993",
+                    hintText: "Ex. ${DateHelper.format(DateTime.now())}",
                     labelText: "Birth date",
                     suffixIcon: IconButton(
                       icon: Icon(Icons.date_range),
@@ -140,6 +140,12 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                 validator: (value) {
                   try {
                     var newDate = DateHelper.parse(value);
+
+                    if (newDate.isBefore(DateTime(2)))
+                      return "Date must be after year second";
+
+                    if (newDate.isAfter(DateTime.now()))
+                      return "Date has to be before today";
 
                     _birthDateField.text = DateHelper.format(newDate);
                     user.dob.date = newDate;
@@ -201,7 +207,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
 
     var newDate = await showDatePicker(
       context: context,
-      firstDate: DateTime(0),
+      firstDate: DateTime(2),
       initialDate: user.dob?.date ?? DateTime.now(),
       lastDate: DateTime.now(),
     );

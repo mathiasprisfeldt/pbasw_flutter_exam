@@ -43,38 +43,45 @@ Card createCard(String userId, BuildContext context, User user) {
                 minRadius: 50,
                 child: Text(user.name.initials)),
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(user.name.full, style: Theme.of(context).textTheme.title),
-                Visibility(
-                  child: Text(
-                    "Tel.: ${user.phone}",
-                    style: Theme.of(context).textTheme.body2,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, right: 32.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  buildInfoLine(user.name.full, context, isHeader: true),
+                  Visibility(
+                    child: buildInfoLine("Tel.: ${user.phone}", context),
+                    visible: user.phone != null && user.phone.isNotEmpty,
                   ),
-                  visible: user.phone != null && user.phone.isNotEmpty,
-                ),
-                Visibility(
-                  child: Text(
-                    "Computer: ${user.computer}",
-                    style: Theme.of(context).textTheme.body2,
+                  Visibility(
+                    child: buildInfoLine("Computer: ${user.computer}", context),
+                    visible: user.computer != null && user.computer.isNotEmpty,
                   ),
-                  visible: user.computer != null && user.computer.isNotEmpty,
-                ),
-                Visibility(
-                  child: Text(
-                    "Born: ${DateHelper.format(user.dob.date)} (${user.dob.age} years old)",
-                    style: Theme.of(context).textTheme.body2,
-                  ),
-                  visible: user.dob != null && user.dob.date != null,
-                )
-              ],
+                  Visibility(
+                    child: buildInfoLine(
+                        "Born: ${DateHelper.format(user.dob.date)} (${user.dob.age} years old)",
+                        context),
+                    visible: user.dob != null && user.dob.date != null,
+                  )
+                ],
+              ),
             ),
           )
         ],
       ),
     ),
+  );
+}
+
+Text buildInfoLine(String info, BuildContext context, {bool isHeader}) {
+  var theme = Theme.of(context).textTheme;
+
+  return Text(
+    info,
+    style: isHeader != null && isHeader ? theme.title : theme.body2,
+    overflow: TextOverflow.fade,
+    softWrap: false,
+    maxLines: 1,
   );
 }
