@@ -41,7 +41,7 @@ Card createCard(String userId, BuildContext context, User user) {
                     ? NetworkImage(user.picture.medium)
                     : null,
                 minRadius: 50,
-                child: Text(user.name.initials)),
+                child: Text(user.name.initials.toLowerCase())),
           ),
           Expanded(
             child: Padding(
@@ -49,21 +49,25 @@ Card createCard(String userId, BuildContext context, User user) {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  buildInfoLine(user.name.full, context, isHeader: true),
+                  buildInfoLine(user.name.full, context,
+                      customStyle: Theme.of(context).textTheme.title),
+                  Container(
+                    height: 5,
+                  ),
                   Visibility(
                     child: buildInfoLine("Tel.: ${user.phone}", context),
                     visible: user.phone != null && user.phone.isNotEmpty,
-                  ),
-                  Visibility(
-                    child: buildInfoLine("Computer: ${user.computer}", context),
-                    visible: user.computer != null && user.computer.isNotEmpty,
                   ),
                   Visibility(
                     child: buildInfoLine(
                         "Born: ${DateHelper.format(user.dob.date)} (${user.dob.age} years old)",
                         context),
                     visible: user.dob != null && user.dob.date != null,
-                  )
+                  ),
+                  Visibility(
+                    child: buildInfoLine("Computer: ${user.computer}", context),
+                    visible: user.computer != null && user.computer.isNotEmpty,
+                  ),
                 ],
               ),
             ),
@@ -74,12 +78,12 @@ Card createCard(String userId, BuildContext context, User user) {
   );
 }
 
-Text buildInfoLine(String info, BuildContext context, {bool isHeader}) {
+Text buildInfoLine(String info, BuildContext context, {TextStyle customStyle}) {
   var theme = Theme.of(context).textTheme;
 
   return Text(
     info,
-    style: isHeader != null && isHeader ? theme.title : theme.body2,
+    style: customStyle ?? theme.body2,
     overflow: TextOverflow.fade,
     softWrap: false,
     maxLines: 1,

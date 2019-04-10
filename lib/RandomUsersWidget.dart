@@ -7,36 +7,26 @@ import 'package:pbasw_flutter_exam/services/RandomUserService.dart';
 class RandomUsersWidget extends TabPageWidget {
   final RandomUserService randomUserService = RandomUserService();
 
-  RandomUsersWidget({Key key})
-      : super(
-            key: key,
-            fabIcon: Icons.refresh,
-            onFabPressed: OnFabPressedEvent());
+  RandomUsersWidget({Key key}) : super(key: key);
 
   @override
   _RandomUsersWidgetState createState() => _RandomUsersWidgetState();
 }
 
 class _RandomUsersWidgetState extends State<RandomUsersWidget> {
+  GlobalKey<RefreshIndicatorState> _ind;
+
   @override
   void initState() {
     super.initState();
-    widget.onFabPressed.addListener(onFabPressed);
-
-    if (widget.randomUserService.recentUsers == null) onFabPressed();
+    if (widget.randomUserService.recentUsers == null) onRefreshed();
   }
 
-  void onFabPressed() {
-    widget.randomUserService.updateRecentUsers(50).whenComplete(() {
+  Future onRefreshed() {
+    return widget.randomUserService.updateRecentUsers(50).whenComplete(() {
       if (!mounted) return;
       setState(() {});
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.onFabPressed.removeListener(onFabPressed);
   }
 
   @override
@@ -54,10 +44,14 @@ class _RandomUsersWidgetState extends State<RandomUsersWidget> {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
         } else {
-          return ListView(
-              children: snapshot.data
-                  .map((user) => buildUserCard(context, user))
-                  .toList());
+          return RefreshIndicator(
+            key: _ind,
+            onRefresh: onRefreshed,
+            child: ListView(
+                children: snapshot.data
+                    .map((user) => buildUserCard(context, user))
+                    .toList()),
+          );
         }
       },
     );

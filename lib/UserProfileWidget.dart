@@ -16,6 +16,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   final _formKey = GlobalKey<FormState>();
 
   User user;
+
+  String title = "User Profile";
   bool get userExisting => user.name?.first != null;
 
   TextEditingController _birthDateField = TextEditingController();
@@ -25,10 +27,12 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   FocusNode birthDateNode = FocusNode();
   FocusNode computerNode = FocusNode();
 
-  bool isRequesting = false;
+  bool isSubmitting = false;
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
     var existingUser = ModalRoute.of(context).settings.arguments;
     if (user == null) {
       if (existingUser != null)
@@ -37,8 +41,11 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
         user = User.empty();
     }
 
-    var title = userExisting ? "Editing ${user.name.first}" : "New User";
+    title = userExisting ? "Editing ${user.name.first}" : "New User";
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
@@ -46,7 +53,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
       body: Center(
         child: Builder(
           builder: (context) {
-            if (!isRequesting) {
+            if (!isSubmitting) {
               return buildForm(context);
             } else {
               return CircularProgressIndicator();
@@ -60,7 +67,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   SingleChildScrollView buildForm(BuildContext context) {
     var submitText = userExisting ? "Edit" : "Create";
 
-    if (user?.dob?.date != null) {
+    if (user?.dob?.date != null && _birthDateField.text.isEmpty) {
       _birthDateField.text = DateHelper.format(user.dob.date);
     }
 
@@ -177,6 +184,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: RaisedButton(
+                  color: Theme.of(context).accentColor,
+                  colorBrightness: Brightness.dark,
                   child: Text(submitText),
                   onPressed: () => onSubmitPressed(context),
                 ),
@@ -191,7 +200,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   void onSubmitPressed(BuildContext context) {
     if (_formKey.currentState.validate()) {
       setState(() {
-        isRequesting = true;
+        isSubmitting = true;
       });
 
       widget.userService.updateUser(user.id, user).then((val) {

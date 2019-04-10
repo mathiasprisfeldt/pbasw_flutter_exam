@@ -34,15 +34,20 @@ class _TabsWidgetState extends State<TabsWidget> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Home"),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: widget.pages
-              .map((page) => Tab(
-                    icon: Icon(page._icon),
-                  ))
-              .toList(),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight - 8),
+        child: AppBar(
+          flexibleSpace: Container(
+            alignment: Alignment.bottomCenter,
+            child: TabBar(
+              controller: _tabController,
+              tabs: widget.pages
+                  .map((page) => Tab(
+                        icon: Icon(page._icon),
+                      ))
+                  .toList(),
+            ),
+          ),
         ),
       ),
       body: TabBarView(
