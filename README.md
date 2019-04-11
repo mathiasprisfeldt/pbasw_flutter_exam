@@ -1,16 +1,25 @@
 # pbasw_flutter_exam
+Small app made as a 1 week project to complete my course in Dart/Flutter taken when i studied for PBA in Software Development.
 
-A new Flutter project.
+<br>
 
-## Getting Started
+## Features:
+- Page 1
+  - Retrieve 50 random users from [randomuser.org](https://randomuser.org)
+  - User card with different info
+  - Pull down to refresh
+- Page 2
+  - See user cards created by users stored in Firebase' Firestore
+  - Add, edit or delete these users
+    - Add by pressing on FAB
+    - Edit by pressing on user card
+    - Delete by holding down on user card
 
-This project is a starting point for a Flutter application.
+<br>
 
-A few resources to get you started if this is your first Flutter project:
+## Goal:
+Combine all the different things we learned from the course into one small app, which is why the app makes no sense at all.
 
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
+<br>
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+[Release - on its way]()
