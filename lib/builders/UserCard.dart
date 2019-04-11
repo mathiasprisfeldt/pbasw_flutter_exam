@@ -5,27 +5,36 @@ import 'package:pbasw_flutter_exam/types/User.dart';
 
 Widget buildUserCard(BuildContext context, User user,
     {String userId, UserService userService}) {
-  return Builder(
-    builder: (context) {
-      if (userId != null && userService != null) {
-        return Dismissible(
-          onDismissed: (dir) {
-            userService.removeUser(userId);
-          },
-          direction: DismissDirection.endToStart,
-          key: Key(userId),
-          child: createCard(userId, context, user),
-        );
-      } else {
-        return createCard(userId, context, user);
-      }
-    },
-  );
-}
-
-Card createCard(String userId, BuildContext context, User user) {
   return Card(
     child: InkWell(
+      onLongPress: userId != null
+          ? () {
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: Text("Delete user?"),
+                      content: Text(
+                          "This will delete the user and is not reversible."),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text("CANCEL"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        FlatButton(
+                          child: Text("ACCEPT"),
+                          onPressed: () {
+                            userService.removeUser(userId);
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  });
+            }
+          : null,
       onTap: userId != null
           ? () {
               Navigator.of(context)

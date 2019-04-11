@@ -18,6 +18,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   User user;
 
   String title = "User Profile";
+  String submitText = "Submit";
+
   bool get userExisting => user.name?.first != null;
 
   TextEditingController _birthDateField = TextEditingController();
@@ -42,6 +44,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
     }
 
     title = userExisting ? "Editing ${user.name.first}" : "New User";
+    submitText = userExisting ? "Edit" : "Create";
   }
 
   @override
@@ -65,8 +68,6 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   }
 
   SingleChildScrollView buildForm(BuildContext context) {
-    var submitText = userExisting ? "Edit" : "Create";
-
     if (user?.dob?.date != null && _birthDateField.text.isEmpty) {
       _birthDateField.text = DateHelper.format(user.dob.date);
     }
