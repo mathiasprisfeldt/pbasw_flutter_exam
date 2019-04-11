@@ -13,16 +13,20 @@ class UserProfileWidget extends StatefulWidget {
 }
 
 class _UserProfileWidgetState extends State<UserProfileWidget> {
+  static const _firstLastFieldSpacing = 4.0;
+  final _keyboardCloseDelay = 100;
+  final _minDate = DateTime(
+      2); // Has to be after year 1 because of Firestore Timestamp time constraints
   final _formKey = GlobalKey<FormState>();
 
-  User user;
+  User user; // The user object the form makes changes to.
 
   String title = "User Profile";
   String submitText = "Submit";
 
-  bool get userExisting => user.name?.first != null;
-
   TextEditingController _birthDateField = TextEditingController();
+
+  bool get userExisting => user.name?.first != null;
 
   // Focus nodes
   FocusNode lastNameNode = FocusNode();
@@ -35,12 +39,10 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
+    // Use existant user if navigated from named route with user id as argument.
     var existingUser = ModalRoute.of(context).settings.arguments;
     if (user == null) {
-      if (existingUser != null)
-        user = existingUser;
-      else
-        user = User.empty();
+      user = existingUser != null ? existingUser : User.empty();
     }
 
     title = userExisting ? "Editing ${user.name.first}" : "New User";
@@ -56,10 +58,10 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
       body: Center(
         child: Builder(
           builder: (context) {
-            if (!isSubmitting) {
-              return buildForm(context);
-            } else {
+            if (isSubmitting) {
               return CircularProgressIndicator();
+            } else {
+              return buildForm(context);
             }
           },
         ),
@@ -86,7 +88,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                      */
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(right: 4.0),
+                      padding:
+                          const EdgeInsets.only(right: _firstLastFieldSpacing),
                       child: TextFormField(
                         initialValue: user?.name?.first,
                         textInputAction: TextInputAction.next,
@@ -109,7 +112,8 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                      */
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 4.0),
+                      padding:
+                          const EdgeInsets.only(left: _firstLastFieldSpacing),
                       child: TextFormField(
                         initialValue: user?.name?.last,
                         textInputAction: TextInputAction.next,
@@ -149,7 +153,7 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
                   try {
                     var newDate = DateHelper.parse(value);
 
-                    if (newDate.isBefore(DateTime(2)))
+                    if (newDate.isBefore(_minDate))
                       return "Date must be after year second";
 
                     if (newDate.isAfter(DateTime.now()))
@@ -213,15 +217,17 @@ class _UserProfileWidgetState extends State<UserProfileWidget> {
   void _selectDate(BuildContext context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
 
-    await Future.delayed(Duration(milliseconds: 100));
+    // Done to prevent dialog keyboard overflow because Flutter doesn't handle this.
+    await Future.delayed(Duration(milliseconds: _keyboardCloseDelay));
 
     var newDate = await showDatePicker(
       context: context,
-      firstDate: DateTime(2),
+      firstDate: _minDate,
       initialDate: user.dob?.date ?? DateTime.now(),
       lastDate: DateTime.now(),
     );
 
+    // If the user pressed cancel and diden't select a date.
     if (newDate == null) return;
 
     setState(() {

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pbasw_flutter_exam/helpers/DateHelper.dart';
+import 'package:pbasw_flutter_exam/main.dart';
 import 'package:pbasw_flutter_exam/services/UserService.dart';
 import 'package:pbasw_flutter_exam/types/User.dart';
+
+const userCardAvatarRadius = 50.0;
 
 Widget buildUserCard(BuildContext context, User user,
     {String userId, UserService userService}) {
@@ -38,7 +41,7 @@ Widget buildUserCard(BuildContext context, User user,
       onTap: userId != null
           ? () {
               Navigator.of(context)
-                  .pushNamed("/user", arguments: user.withId(userId));
+                  .pushNamed(userRoute, arguments: user.withId(userId));
             }
           : null,
       child: Row(
@@ -49,7 +52,7 @@ Widget buildUserCard(BuildContext context, User user,
                 backgroundImage: user.picture?.medium != null
                     ? NetworkImage(user.picture.medium)
                     : null,
-                minRadius: 50,
+                minRadius: userCardAvatarRadius,
                 child: Text(user.name.initials.toLowerCase())),
           ),
           Expanded(

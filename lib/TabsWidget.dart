@@ -10,8 +10,9 @@ class TabsWidget extends StatefulWidget {
 }
 
 class _TabsWidgetState extends State<TabsWidget> with TickerProviderStateMixin {
-  TabPage _currPage;
+  static const _appBarHeight = kToolbarHeight - 8;
 
+  TabPage _currPage;
   TabController _tabController;
 
   @override
@@ -35,7 +36,7 @@ class _TabsWidgetState extends State<TabsWidget> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight - 8),
+        preferredSize: Size.fromHeight(_appBarHeight),
         child: AppBar(
           flexibleSpace: Container(
             alignment: Alignment.bottomCenter,

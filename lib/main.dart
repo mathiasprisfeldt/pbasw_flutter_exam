@@ -4,6 +4,8 @@ import 'package:pbasw_flutter_exam/RandomUsersWidget.dart';
 import 'package:pbasw_flutter_exam/UsersWidget.dart';
 import 'TabsWidget.dart';
 
+const userRoute = "/user";
+
 void main() => runApp(MaterialApp(
       title: "PBASW Flutter Exam",
       theme: ThemeData.light(),
@@ -13,5 +15,5 @@ void main() => runApp(MaterialApp(
           TabPage(Icons.face, UsersWidget())
         ],
       ),
-      routes: {'/user': (context) => new UserProfileWidget()},
+      routes: {userRoute: (context) => new UserProfileWidget()},
     ));

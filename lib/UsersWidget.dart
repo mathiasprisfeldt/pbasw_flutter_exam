@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:pbasw_flutter_exam/TabsWidget.dart';
 import 'package:pbasw_flutter_exam/builders/UserCard.dart';
+import 'package:pbasw_flutter_exam/main.dart';
 import 'package:pbasw_flutter_exam/services/UserService.dart';
 import 'package:pbasw_flutter_exam/types/User.dart';
 
@@ -29,7 +30,7 @@ class _UsersWidgetState extends State<UsersWidget> {
   }
 
   void onFabPressed() {
-    Navigator.of(context).pushNamed("/user");
+    Navigator.of(context).pushNamed(userRoute);
   }
 
   @override

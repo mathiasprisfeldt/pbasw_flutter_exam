@@ -14,6 +14,8 @@ class RandomUsersWidget extends TabPageWidget {
 }
 
 class _RandomUsersWidgetState extends State<RandomUsersWidget> {
+  static const _amountOfUsers = 50;
+
   GlobalKey<RefreshIndicatorState> _ind;
 
   @override
@@ -23,7 +25,9 @@ class _RandomUsersWidgetState extends State<RandomUsersWidget> {
   }
 
   Future onRefreshed() {
-    return widget.randomUserService.updateRecentUsers(50).whenComplete(() {
+    return widget.randomUserService
+        .updateRecentUsers(_amountOfUsers)
+        .whenComplete(() {
       if (!mounted) return;
       setState(() {});
     });
